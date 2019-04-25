@@ -41,3 +41,9 @@ body{
     text-align: center;
     background-color: white;
 }
+
+#logout{
+    float: bottom;
+}
+
+

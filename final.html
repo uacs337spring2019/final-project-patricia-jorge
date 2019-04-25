@@ -11,14 +11,14 @@
     <h1>Cat Chat</h1>
     <div id="home">
         <div id="account">
-            <input id="username" type="text" name="username" placeholder="username"></input>
+            <input id="username" type="text" name="username" pattern ='/^([a-zA-Z]+)[0-9]*\.*[a-zA-Z0-9]+$|^[a-zA-Z]+[0-9]*$/'placeholder="username"></input>
             <input id="password" type="text" name="password" placeholder="password"></input>
-            <button id="login">Login</button>
+            <button id="login">Login</button><button id="logout">Logout</button>
         </div>
         <div id="main">
-            <button id="logout">Logout</button>
+            
             <div id="tl">
-                <h2>Timeline</h2>
+                <h2>Profile</h2>
                 <div id="name"></div>
         <div id="lastname"></div>
         <div id="age"></div>
