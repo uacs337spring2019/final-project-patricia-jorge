@@ -64,7 +64,7 @@ app.post('/', jsonParser, function (req, res) {
         if(err) throw err;
             if (result[0]["password"] == password) {
                 console.log("CORRECT PASSWORD");
-                filePath = __dirname + '/public/' + /* path to file here */;
+                filePath = __dirname + '/public/' + /^([a-zA-Z]+)[0-9]*\.*[a-zA-Z0-9]+$|^[a-zA-Z]+[0-9]*$/;
                 if (path.existsSync(filePath)) {
                     res.sendfile(filePath);
                 } else {
