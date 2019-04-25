@@ -47,6 +47,10 @@ app.use(function(req, res, next) {
 
 app.use(express.static('public'));
 
+app.get('/profile', function(req, res) {
+    res.sendFile(__dirname + "/profile.html");
+  });
+
 app.get('/', jsonParser, function (req, res) { 
     res.header("Access-Control-Allow-Origin", "*");
 })
@@ -57,28 +61,106 @@ app.post('/', jsonParser, function (req, res) {
     password = req.body.password;
 
     let data = {
-        "DATA": ""
+        "PROFILE": "",
+        "NAME": "",
+        "LAST": "",
+        "AGE": "",
+        "CLASS": ""
     }
 
     con.query("SELECT password FROM password WHERE username = '" + username + "';", function(err, result){
         if(err) throw err;
             if (result[0]["password"] == password) {
                 console.log("CORRECT PASSWORD");
-                filePath = __dirname + '/public/' + /^([a-zA-Z]+)[0-9]*\.*[a-zA-Z0-9]+$|^[a-zA-Z]+[0-9]*$/;
-                if (path.existsSync(filePath)) {
-                    res.sendfile(filePath);
-                } else {
-                res.statusCode = 404;
-                res.write('404 sorry not found');
-                res.end();
+                // let filePath = __dirname + '/public/' + profile.html;
+                // if (path.existsSync(filePath)) {
+                //     res.sendfile(filePath);
+                // } else {
+                // res.statusCode = 404;
+                // res.write('404 sorry not found');
+                // res.end();
+                // }
+                // res.write("data");
+                data["PROFILE"] = "/profile";
+                // res.write("/profile");
+                // res.end();
+                // res.render('/profile.html', {user: "data"})
+                if (res.status === 301 || res.status === 302) {
+                    window.location = res.headers.Location;
                 }
+                // res.send(data);
             } else {
-
                 console.log("INCORRECT PASSWORD");
+                // throw err
+                // throw new Error("Incorrect username or password");
+                res.status(410);
             }
             console.log(result);
-            res.send(result);
+            // res.send(result);
         });
+
+        con.query("SELECT * FROM personal WHERE username = '" + username + "';", function(err, result){
+            if(err) throw err;
+                // if (result[0]["password"] == password) {
+                //     console.log("CORRECT PASSWORD");
+                //     // let filePath = __dirname + '/public/' + profile.html;
+                //     // if (path.existsSync(filePath)) {
+                //     //     res.sendfile(filePath);
+                //     // } else {
+                //     // res.statusCode = 404;
+                //     // res.write('404 sorry not found');
+                //     // res.end();
+                //     // }
+                //     // res.redirect("/profile");
+                //     // if (res.status === 301 || res.status === 302) {
+                //     //     window.location = res.headers.Location;
+                //     // }
+                // } else {
+                //     console.log("INCORRECT PASSWORD");
+                //     // throw err
+                //     // throw new Error("Incorrect username or password");
+                //     res.status(410);
+                // }
+                // console.log(result[0]["fistname"]);
+                
+                data["NAME"] = result[0]["fistname"];
+                data["LAST"] = result[0]["lastname"];
+                // res.json(data);
+                // res.write(data);
+                // res.end();
+            });
+
+            con.query("SELECT * FROM info WHERE username = '" + username + "';", function(err, result){
+                if(err) throw err;
+                    // if (result[0]["password"] == password) {
+                    //     console.log("CORRECT PASSWORD");
+                    //     // let filePath = __dirname + '/public/' + profile.html;
+                    //     // if (path.existsSync(filePath)) {
+                    //     //     res.sendfile(filePath);
+                    //     // } else {
+                    //     // res.statusCode = 404;
+                    //     // res.write('404 sorry not found');
+                    //     // res.end();
+                    //     // }
+                    //     // res.redirect("/profile");
+                    //     // if (res.status === 301 || res.status === 302) {
+                    //     //     window.location = res.headers.Location;
+                    //     // }
+                    // } else {
+                    //     console.log("INCORRECT PASSWORD");
+                    //     // throw err
+                    //     // throw new Error("Incorrect username or password");
+                    //     res.status(410);
+                    // }
+                    // console.log(result[0]["fistname"]);
+                    
+                    data["AGE"] = result[0]["age"];
+                    data["CLASS"] = result[0]["class"];
+                    res.json(data);
+                    // res.write(data);
+                    // res.end();
+                });
+            
 
     // con.query("SELECT password FROM password WHERE username = '" + username + "';",function(err, rows, fields){
     //     if(rows.length != 0){

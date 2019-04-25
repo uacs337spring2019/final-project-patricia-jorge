@@ -1,10 +1,13 @@
 "use strict";
 
 (function() {
+    // document.write("<sript type")
     window.onload = function() {
         // document.getElementById("login").onclick = login;
         document.getElementById("login").onclick = enter;
+        document.getElementById("logout").onclick = logout;
         // callAjax();
+        // start();
         // document.getElementById("create").onclick = createAccount;
     };
 
@@ -40,6 +43,11 @@
         //     });
     }
 
+    function logout() {
+        document.getElementById("main").innerHTML = "";
+
+    }
+
     function checkPassword(url) {
         fetch(url)
         .then(checkStatus) 
@@ -62,7 +70,17 @@
     function enter() {
 		let name = document.getElementById("username").value;
 		let password = document.getElementById("password").value;
-		let url = "http://localhost:3000";
+        let url = "http://localhost:3000";
+        
+        // let url = "http://localhost:3000?first="+name+"&last="+password;
+        // document.location.href = url;
+
+        // var locate = window.location;
+
+        // document.name.password.value = locate;
+
+        // var text = document.name.password.value
+        // console.log(url);
 	
 		const info = {name: name, 
 					 password: password};
@@ -80,7 +98,22 @@
 		fetch(url, fetchOptions)
 			.then(checkStatus)
 			.then(function(responseText) {
-                console.log(responseText);
+                // console.log("RESPONSE TEXT");
+                // responseText = responseText.replace("/profile", "");
+                let data = JSON.parse(responseText);
+            console.log(data);
+            // processJSON(data);
+            // console.log(data);
+            document.getElementById("account").innerHTML = "";
+            document.getElementById("name").innerHTML = data["NAME"];
+            document.getElementById("lastname").innerHTML = data["LAST"];
+            document.getElementById("age").innerHTML = data["AGE"];
+            document.getElementById("class").innerHTML = data["CLASS"];
+                // console.log(responseText["NAME"]);
+                
+                // window.location.href ='profile.html';
+
+                // console.log(responseText);
 			})
 			.catch(function(error) {
 				console.log(error);
@@ -93,8 +126,10 @@
 		fetch(url)
 		.then(checkStatus)
 		.then(function(responseText) {
-			let data = JSON.parse(responseText);
-			processJSON(data);
+            // let data = JSON.parse(responseText);
+            // console.log(data);
+            // processJSON(data);
+            window.location='profile.html';
 		})
 		.catch(function(error) {
 			console.log(error);
@@ -118,12 +153,13 @@
     }
 
     function checkStatus(response) {
+        // console.log(response.status);
         if (response.status >= 200 && response.status < 300) {
             return response.text(); 
         } else if(response.status == 410) {
             let error = document.getElementById("errors");
-            error.innerHTML = "No data for chosen state";
-            return Promise.reject(new Error("sorry we do not have any data"));
+            error.innerHTML = "Incorrect username or password";
+            return Promise.reject(new Error("Incorrect username or password"));
         } else if(response.status == 404) {
             let error = document.getElementById("errors");
             error.innerHTML = "ERROR: Page not found";
@@ -134,8 +170,3 @@
     }
 
 })();
-
-//db
-// login: username password
-// user: key, username, include name and lastname
-// info: key, username, include age, email and descritpion
